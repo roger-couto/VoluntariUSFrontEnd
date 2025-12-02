@@ -1,0 +1,39 @@
+<header class="topbar">
+  <h1 class="logo">VoluntariUS</h1>
+  <nav>
+    <a routerLink="/home">Lista de Evento</a>
+  </nav>
+</header>
+
+<section class="inscricoes-container">
+  <h2>Minhas Inscrições</h2>
+
+  @if (isLoading) {
+    <p>Carregando suas inscrições...</p>
+  } @else if (errorMessage) {
+    <div class="error-message">{{ errorMessage }}</div>
+  } @else if (inscricoes.length === 0) {
+    <div class="no-data-message">
+      Você não tem inscrições ativas. Comece a ajudar! 🌍
+    </div>
+  } @else {
+    <div class="list-cards">
+      @for (inscricao of inscricoes; track inscricao.id) {
+        <div class="inscricao-card">
+          <div class="card-content">
+            <h3>{{ inscricao.evento.titulo }}</h3>
+            <p>{{ inscricao.evento.descricao }}</p>
+            <div class="details">
+              <span>🗓️ Data do Evento: {{ inscricao.evento.dataEvento | date:'fullDate' }}</span>
+              <span>📍 Local: {{ inscricao.evento.local }}</span>
+              <span class="status-badge status-{{ inscricao.evento.status | lowercase }}">{{ inscricao.evento.status }}</span>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="cancel-button" (click)="cancelarInscricao(inscricao.id)">Cancelar Inscrição</button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</section>

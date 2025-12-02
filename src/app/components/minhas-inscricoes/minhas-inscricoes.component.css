@@ -1,0 +1,94 @@
+/* src/app/components/minhas-inscricoes/minhas-inscricoes.component.css */
+
+:root {
+  --color-primary: #21b34e;
+  --color-status-open: #4CAF50;
+  --color-status-closed: #F44336;
+}
+
+:host {
+  display: block;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  background-color: #f1f3f4;
+}
+
+.topbar {
+  background: var(--color-primary);
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 40px;
+}
+
+.topbar .logo { margin: 0; font-size: 26px; font-weight: bold; }
+.topbar nav a { color: white; margin-left: 25px; text-decoration: none; font-weight: bold; cursor: pointer; }
+.topbar nav a:hover { text-decoration: underline; }
+
+.inscricoes-container {
+  max-width: 1000px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.inscricoes-container h2 {
+  font-size: 32px;
+  color: var(--color-primary);
+  border-bottom: 2px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 30px;
+}
+
+.inscricao-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-left: 5px solid var(--color-primary);
+  border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 15px;
+  background-color: #ffffff;
+  transition: all 0.3s ease;
+}
+
+.card-content h3 { margin: 0 0 5px 0; color: #333; }
+.card-content p { color: #666; font-size: 14px; margin-bottom: 10px; }
+.details span { display: inline-block; margin-right: 15px; font-size: 13px; color: #555; font-weight: 600; }
+
+.card-actions { min-width: 180px; text-align: right; }
+.card-actions .cancel-button {
+  background-color: var(--color-status-closed);
+  color: white;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.status-badge {
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 12px;
+  color: white;
+}
+
+.status-badge.status-aberto { background-color: var(--color-status-open); }
+.status-badge.status-fechado, .status-badge.status-concluído { background-color: var(--color-status-closed); }
+
+.no-data-message, .error-message {
+  text-align: center;
+  padding: 40px;
+  border: 1px dashed #ccc;
+  border-radius: 8px;
+  color: #777;
+  font-size: 18px;
+  margin-top: 30px;
+}

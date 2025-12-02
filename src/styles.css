@@ -1,1 +1,33 @@
-/* You can add global styles to this file, and also import other style files */
+/* src/styles.css */
+
+/* Definição de Cores para a Vibe Voluntário */
+:root {
+  --color-primary: #4CAF50; /* Verde Principal (Corpo/Botões) */
+  --color-secondary: #8BC34A; /* Verde Mais Claro (Acentos) */
+  --color-background: #f4f4f9; /* Fundo Levemente Cinza */
+  --color-text-dark: #333333; /* Texto Principal */
+  --color-text-light: #ffffff; /* Texto Claro */
+  --color-danger: #f44336; /* Erros */
+}
+
+/* Reset Básico e Fonte */
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-dark);
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+/* Estilo para a barra de navegação Material (se estiver usando) */
+mat-toolbar {
+  background-color: var(--color-primary) !important;
+  color: var(--color-text-light) !important;
+}
+
+/* Utilitário para mensagens de erro */
+.text-danger {
+  color: var(--color-danger);
+  font-size: 0.8em;
+  margin-top: 5px;
+}

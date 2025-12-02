@@ -1,0 +1,65 @@
+@if (usuarioLogado) {
+  <header class="topbar">
+    <h1 class="logo">VoluntariUS</h1>
+    <nav>
+      <a routerLink="/minhas-inscricoes">Minhas inscrições</a>
+      <a (click)="logout()">Sair</a>
+    </nav>
+  </header>
+
+  <section class="dashboard">
+    <h2 class="dashboard-title">Lista de Eventos</h2>
+
+    @if (isLoading) {
+      <p>Carregando eventos...</p>
+    }
+    @else if (errorMessage) {
+      <p class="status-message" style="color: red;">{{ errorMessage }}</p>
+    }
+    @else if (eventos.length === 0) {
+      <p>Nenhum evento disponível no momento.</p>
+    }git init
+    @else {
+
+      @for (evento of eventos; track evento.id) {
+
+        <div class="event-card">
+          <div class="event-info">
+            <h3>{{ evento.titulo }}</h3>
+            <p>{{ evento.descricao }}</p>
+            <p><strong>Data:</strong> {{ evento.dataEvento | date:'dd/MM/yyyy HH:mm' }}</p>
+            <p><strong>Organizador:</strong> {{ evento.organizadorNome }}</p>
+          </div>
+
+          <div class="event-side">
+            <div class="status-container">
+              <span class="status-label">Status:</span>
+
+              <span class="status-badge"
+                    [ngClass]="{
+                      'status-aberto': evento.status.toUpperCase() === 'ABERTO' || evento.status.toUpperCase() === 'ATIVO',
+                      'status-fechado': evento.status.toUpperCase() === 'FECHADO',
+                      'status-concluido': evento.status.toUpperCase() === 'CONCLUIDO'
+                    }">
+                {{ resolverStatus(evento.status) }}
+              </span>
+            </div>
+
+            <p><strong>Max. voluntários:</strong> {{ evento.maxVoluntarios }}</p>
+
+            @if (evento.status.toUpperCase() === 'ABERTO' || evento.status.toUpperCase() === 'ATIVO') {
+              <button class="action-button"
+                      (click)="adicionarPresenca(evento.id, evento.titulo)">
+                Marcar Presença
+              </button>
+            }
+            @else {
+              <span class="status-message">Inscrições Fechadas</span>
+            }
+          </div>
+
+        </div>
+      }
+    }
+  </section>
+}

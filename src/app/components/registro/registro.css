@@ -1,0 +1,67 @@
+/* Deixa o registro igual ao quadrado do login */
+.registro-container {
+  max-width: 400px;
+  margin: 80px auto; /* Centraliza */
+  padding: 30px;
+  background-color: var(--color-text-light);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.registro-container h2 {
+  color: var(--color-primary);
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: var(--color-text-dark);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--color-primary);
+  color: var(--color-text-light);
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover:not([disabled]) {
+  background-color: var(--color-secondary);
+}
+
+button[type="submit"]:disabled {
+  background-color: #aaa;
+  cursor: not-allowed;
+}
+
+p {
+  text-align: center;
+  margin-top: 15px;
+}
+
+p a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
