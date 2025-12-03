@@ -1,4 +1,4 @@
-@if (usuarioLogado) {
+@if (true) {
   <header class="topbar">
     <h1 class="logo">VoluntariUS</h1>
     <nav>
@@ -18,7 +18,7 @@
     }
     @else if (eventos.length === 0) {
       <p>Nenhum evento disponível no momento.</p>
-    }git init
+    }
     @else {
 
       @for (evento of eventos; track evento.id) {
