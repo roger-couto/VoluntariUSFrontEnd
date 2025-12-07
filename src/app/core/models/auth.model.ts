@@ -1,5 +1,3 @@
-// src/app/core/models/auth.model.ts
-// Este arquivo é o único que usa o sufixo '.model' no nome do arquivo.
 export interface Credenciais {
   email: string;
   senha: string;

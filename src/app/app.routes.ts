@@ -27,19 +27,17 @@ export const routes: Routes = [
   {
     path: 'eventos',
     loadComponent: () =>
-      import('./components/eventos/lista-eventos/evento') // Caminho para o arquivo
-        .then(m => m.ListaEventosComponent), // 👈 Funciona se ListaEventosComponent estiver EXPORTADO
+      import('./components/eventos/lista-eventos/evento')
+        .then(m => m.ListaEventosComponent),
     canActivate: [AuthGuard]
   },
   {
-    // 💡 Adicionando a rota para Minhas Inscrições (próxima etapa)
     path: 'minhas-inscricoes',
     loadComponent: () =>
       import('./components/minhas-inscricoes/minhas-inscricoes.component').then(m => m.MinhasInscricoesComponent),
     canActivate: [AuthGuard]
   },
 
-  // Redirecionamento padrão
   {
     path: '',
     redirectTo: '/home',

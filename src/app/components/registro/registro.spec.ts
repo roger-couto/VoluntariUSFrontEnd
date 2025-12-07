@@ -1,5 +1,3 @@
-// Caminho: src/app/components/registro/registro.component.ts
-
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -7,13 +5,10 @@ import { Component, OnInit } from '@angular/core';
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.css']
 })
-export class RegistroComponent implements OnInit { // <-- CORREÇÃO: A classe PRECISA ser exportada
+export class RegistroComponent implements OnInit {
 
-  // Exemplo de injeção de dependência e FormBuilder
-  // constructor(private fb: FormBuilder, private authService: AuthService) { }
   constructor() { }
 
   ngOnInit(): void {
-    // Inicialização de formulários ou dados
   }
 }

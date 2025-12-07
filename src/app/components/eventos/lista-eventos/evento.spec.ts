@@ -3,7 +3,6 @@ import { ListaEventosComponent } from './evento';
 
 describe('ListaEventosComponent', () => {
   beforeEach(async () => {
-    // 💡 Configura o módulo de teste para o componente Standalone
     await TestBed.configureTestingModule({
       imports: [ListaEventosComponent]
     }).compileComponents();

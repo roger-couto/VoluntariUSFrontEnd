@@ -1,6 +1,10 @@
-// src/app/core/models/evento.model.ts (COMPLETO E CORRIGIDO)
+export interface UsuarioInscrito {
+  id: number;
+  nome: string;
+  email: string;
+  telefone: string | null;
+}
 
-// 💡 Definição do Evento completa para corrigir o erro TS2553
 export interface Evento {
   id: number;
   titulo: string;
@@ -8,11 +12,9 @@ export interface Evento {
   dataEvento: string;
   local: string;
   maxVoluntarios: number;
-  usuarioId: number;
-  // 💡 PROPRIEDADES FALTANTES que causam o erro de tipagem no home.ts
   organizadorId: number;
   organizadorNome: string;
-  status: 'Aberto' | 'Fechado' | 'Concluído';
+  status: 'Aberto' | 'Fechado' | 'Concluído' | string;
   createdAt: string;
 }
 
@@ -24,11 +26,11 @@ export interface NovoEvento {
   maxVoluntarios: number;
 }
 
-// 💡 Modelo necessário para receber dados do Backend na tela "Minhas Inscrições"
 export interface Inscricao {
   id: number;
-  eventoId: number;
-  usuarioId: number;
+  usuario: UsuarioInscrito;
+  evento: Evento;
   dataInscricao: string;
-  evento: Evento; // Detalhes do evento inscrito
+  status: string;
+  observacoes: string | null;
 }

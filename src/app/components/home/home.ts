@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef, inject } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/services/auth';
 import { Evento } from '../../core/models/evento.model';
 import { EventoService } from '../../core/services/evento.service';
-import { catchError, of, finalize } from 'rxjs';
+import { catchError, of, finalize, tap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -21,46 +21,35 @@ export class HomeComponent implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
   private eventoService = inject(EventoService);
+  private cdr = inject(ChangeDetectorRef);
 
-  // ✅ NÃO pegar usuário fora do ciclo de vida
   usuarioLogado: any = null;
 
   eventos: Evento[] = [];
   isLoading: boolean = true;
   errorMessage: string | null = null;
 
-  // -----------------------------
-  // CICLO DE VIDA CORRETO
-  // -----------------------------
   ngOnInit(): void {
+    const token = this.authService.getToken();
 
-    // ✅ Pega usuário no momento certo
-    this.usuarioLogado = this.authService.getUser();
-
-    console.log('Usuário logado:', this.usuarioLogado);
-
-    // ✅ Se não houver usuário → força logout
-    if (!this.usuarioLogado) {
+    if (token) {
+      this.usuarioLogado = this.authService.getUser() || { nome: 'Usuário Ativo' };
+      this.carregarEventos();
+    } else {
       alert('Sessão expirada. Faça login novamente.');
       this.logout();
-      return;
     }
-
-    // ✅ Carrega normalmente
-    this.carregarEventos();
   }
 
-  // -----------------------------
-  // CARREGAR EVENTOS
-  // -----------------------------
   carregarEventos(): void {
     this.isLoading = true;
     this.errorMessage = null;
 
     this.eventoService.listarTodos()
       .pipe(
-        catchError((error: HttpErrorResponse) => {
+        tap(data => console.log('TAP: Dados brutos recebidos:', data)),
 
+        catchError((error: HttpErrorResponse) => {
           console.error('Erro ao carregar eventos:', error);
 
           if (error.status === 401 || error.status === 403) {
@@ -72,22 +61,24 @@ export class HomeComponent implements OnInit {
 
           return of([]);
         }),
-        finalize(() => this.isLoading = false)
+        finalize(() => {
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        })
       )
       .subscribe({
-        next: (data) => {
-          console.log('Eventos recebidos:', data.length);
+        next: (data: Evento[]) => {
+          console.log('SUBSCRIBE EXECUTADO: Eventos carregados:', data.length);
           this.eventos = data;
+          this.cdr.detectChanges();
         },
         error: (err) => {
-          console.error('Erro inesperado:', err);
+          console.error('Falha crítica no Subscribe:', err);
+          this.errorMessage = 'Falha crítica ao carregar dados.';
         }
       });
   }
 
-  // -----------------------------
-  // STATUS
-  // -----------------------------
   resolverStatus(status: string): string {
     const s = status ? status.toUpperCase() : '';
     switch (s) {
@@ -103,59 +94,33 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  // -----------------------------
-  // CARROSSEL (SE EXISTIR)
-  // -----------------------------
-  scrollAmount: number = 0;
-  private scrollStep: number = 330;
-
-  nextSlide(): void {
-    if (this.carousel) {
-      this.scrollAmount += this.scrollStep;
-      this.carousel.nativeElement.scrollTo({ left: this.scrollAmount, behavior: 'smooth' });
-    }
-  }
-
-  prevSlide(): void {
-    if (this.carousel) {
-      this.scrollAmount -= this.scrollStep;
-      if (this.scrollAmount < 0) this.scrollAmount = 0;
-      this.carousel.nativeElement.scrollTo({ left: this.scrollAmount, behavior: 'smooth' });
-    }
-  }
-
-  // -----------------------------
-  // LOGOUT
-  // -----------------------------
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/login']);
+    void this.router.navigate(['/login']);
   }
 
-  // -----------------------------
-  // INSCRIÇÃO NO EVENTO
-  // -----------------------------
   adicionarPresenca(eventoId: number, titulo: string): void {
     if (confirm(`Deseja confirmar presença em: ${titulo}?`)) {
-
       this.eventoService.adicionarPresenca(eventoId).subscribe({
 
         next: () => {
-          alert('✅ Presença confirmada!');
+          alert('Presença confirmada!');
           this.carregarEventos();
         },
 
-        error: (err) => {
-          console.error('Erro ao se inscrever:', err);
-
-          const errorMessage =
-            err.error?.message ||
-            err.error ||
-            'Falha ao confirmar presença.';
-
-          alert(`❌ ${errorMessage}`);
+        error: (err: HttpErrorResponse) => {
+          if (err.status === 409) {
+            alert('Presença confirmada! (Você já estava inscrito.)');
+            this.carregarEventos();
+          } else if (err.status === 401 || err.status === 403) {
+            const errorMessage = 'Sessão expirada. Faça login novamente.';
+            alert(`Falha na inscrição: ${errorMessage}`);
+            this.logout();
+          } else {
+            const errorMessage = err.error?.message || err.error?.title || 'Falha ao confirmar presença.';
+            alert(`Falha na inscrição: ${errorMessage}`);
+          }
         }
-
       });
     }
   }

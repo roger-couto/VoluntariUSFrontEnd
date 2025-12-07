@@ -1,4 +1,4 @@
-@if (true) {
+@if (usuarioLogado) {
   <header class="topbar">
     <h1 class="logo">VoluntariUS</h1>
     <nav>
@@ -20,46 +20,54 @@
       <p>Nenhum evento disponível no momento.</p>
     }
     @else {
+      <div #carousel class="events-carousel">
+        @for (evento of eventos; track evento.id) {
 
-      @for (evento of eventos; track evento.id) {
+          <div class="event-card">
+            <div class="event-info">
+              <h3>{{ evento.titulo }}</h3>
 
-        <div class="event-card">
-          <div class="event-info">
-            <h3>{{ evento.titulo }}</h3>
-            <p>{{ evento.descricao }}</p>
-            <p><strong>Data:</strong> {{ evento.dataEvento | date:'dd/MM/yyyy HH:mm' }}</p>
-            <p><strong>Organizador:</strong> {{ evento.organizadorNome }}</p>
-          </div>
+              <p><strong>Data:</strong> {{ evento.dataEvento | date:'dd/MM/yyyy HH:mm' }}</p>
 
-          <div class="event-side">
-            <div class="status-container">
-              <span class="status-label">Status:</span>
-
-              <span class="status-badge"
-                    [ngClass]="{
-                      'status-aberto': evento.status.toUpperCase() === 'ABERTO' || evento.status.toUpperCase() === 'ATIVO',
-                      'status-fechado': evento.status.toUpperCase() === 'FECHADO',
-                      'status-concluido': evento.status.toUpperCase() === 'CONCLUIDO'
-                    }">
-                {{ resolverStatus(evento.status) }}
-              </span>
+              <p>{{ evento.descricao }}</p>
+              <p><strong>Organizador:</strong> {{ evento.organizadorNome }}</p>
             </div>
 
-            <p><strong>Max. voluntários:</strong> {{ evento.maxVoluntarios }}</p>
+            <div class="event-side">
+              <div class="status-container">
+                <span class="status-label">Status:</span>
 
-            @if (evento.status.toUpperCase() === 'ABERTO' || evento.status.toUpperCase() === 'ATIVO') {
-              <button class="action-button"
-                      (click)="adicionarPresenca(evento.id, evento.titulo)">
-                Marcar Presença
-              </button>
-            }
-            @else {
-              <span class="status-message">Inscrições Fechadas</span>
-            }
+                <span class="status-badge"
+                      [ngClass]="{
+                        'status-aberto': evento.status.toUpperCase() === 'ABERTO' || evento.status.toUpperCase() === 'ATIVO',
+                        'status-fechado': evento.status.toUpperCase() === 'FECHADO',
+                        'status-concluido': evento.status.toUpperCase() === 'CONCLUIDO'
+                      }">
+                  {{ resolverStatus(evento.status) }}
+                </span>
+              </div>
+
+              <p><strong>Max. voluntários:</strong> {{ evento.maxVoluntarios }}</p>
+
+              @if (evento.status.toUpperCase() === 'ABERTO' || evento.status.toUpperCase() === 'ATIVO') {
+                <button class="action-button"
+                        (click)="adicionarPresenca(evento.id, evento.titulo)">
+                  Marcar Presença
+                </button>
+              }
+              @else {
+                <span class="status-message">Inscrições Fechadas</span>
+              }
+            </div>
           </div>
-
-        </div>
-      }
+        }
+      </div>
     }
   </section>
+} @else {
+  <div class="not-logged-in-message">
+    <h2>Acesso Restrito</h2>
+    <p>Você precisa estar logado para visualizar os eventos disponíveis.
+      <a routerLink="/login">Faça login.</a></p>
+  </div>
 }

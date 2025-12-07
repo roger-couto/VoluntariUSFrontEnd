@@ -1,7 +1,7 @@
 <header class="topbar">
   <h1 class="logo">VoluntariUS</h1>
   <nav>
-    <a routerLink="/home">Lista de Evento</a>
+    <a routerLink="/home">Lista de Eventos</a>
   </nav>
 </header>
 
@@ -14,7 +14,7 @@
     <div class="error-message">{{ errorMessage }}</div>
   } @else if (inscricoes.length === 0) {
     <div class="no-data-message">
-      Você não tem inscrições ativas. Comece a ajudar! 🌍
+      Você não tem inscrições ativas. Comece a ajudar!
     </div>
   } @else {
     <div class="list-cards">
@@ -24,8 +24,8 @@
             <h3>{{ inscricao.evento.titulo }}</h3>
             <p>{{ inscricao.evento.descricao }}</p>
             <div class="details">
-              <span>🗓️ Data do Evento: {{ inscricao.evento.dataEvento | date:'fullDate' }}</span>
-              <span>📍 Local: {{ inscricao.evento.local }}</span>
+              <span>Data do Evento: {{ inscricao.evento.dataEvento | date:'fullDate' }}</span>
+              <span>Local: {{ inscricao.evento.local }}</span>
               <span class="status-badge status-{{ inscricao.evento.status | lowercase }}">{{ inscricao.evento.status }}</span>
             </div>
           </div>
